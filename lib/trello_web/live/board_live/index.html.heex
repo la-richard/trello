@@ -1,0 +1,17 @@
+<.link navigate={~p"/"}>Back to dashboard</.link>
+<h1><%= @board %></h1>
+<div class="flex flex-row w-full">
+  <div :for={link_id <- Enum.to_list(1..10)} class="flex flex-col basis-48 grow-0 shrink-0 h-full p-2 gap-2">
+    <div class="flex flex-row w-full">
+      <h2>List <%= link_id %></h2>
+    </div>
+    <div class="flex flex-col w-full gap-2">
+      <div :for={task_id <- Enum.to_list(1..5)} class="h-24 w-full border border-solid border-black rounded p-2">
+        Task <%= task_id %>
+      </div>
+    </div>
+    <.link class="w-full p-2 hover:bg-slate-300 rounded">
+    Add a task
+    </.link>
+  </div>
+</div>

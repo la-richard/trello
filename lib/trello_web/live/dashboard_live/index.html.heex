@@ -1,0 +1,10 @@
+<div class="flex flex-col w-full gap-8">
+  <div class="flex flex-col w-full gap-4">
+    <h1 class="uppercase">Your Boards</h1>
+    <div class="w-full flex flex-row flex-wrap gap-2 max-h-96">
+      <.link :for={id <- Enum.to_list(1..10)} navigate={~p"/boards/#{id}"} class="h-24 p-2 basis-60 border border-solid border-black rounded">
+        <span><%= id %></span>
+      </.link>
+    </div>
+  </div>
+</div>

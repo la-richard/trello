@@ -17,7 +17,8 @@ defmodule TrelloWeb.Router do
   scope "/", TrelloWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", DashboardLive.Index, :index
+    live "/boards/:id", BoardLive.Index, :index
   end
 
   # Other scopes may use custom stacks.
