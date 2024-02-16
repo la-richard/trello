@@ -1,0 +1,20 @@
+<.link navigate={~p"/boards/#{@task["list"]["board_id"]}"}>Back to Board</.link>
+<h1><%= @task["name"] %></h1>
+<p>
+  <%= if @task["details"], do: @task["details"], else: "" %>
+</p>
+<h2>Comments</h2>
+<div class="flex flex-col gap-4">
+  <div :for={%{"body" => body, "creator_email" => creator_email} <- @comments} class="flex flex-col gap-2">
+    <h3><%= creator_email %></h3>
+    <p>
+      <%= body %>
+    </p>
+  </div>
+</div>
+<.simple_form for={@form} as={:form} id="post-comment-form" phx-submit="save_comment"> 
+  <.input field={@form[:body]} type="textarea" label="Comment" />
+  <:actions>
+    <.button phx-disable-with="Posting...">Post</.button>
+  </:actions>
+</.simple_form>

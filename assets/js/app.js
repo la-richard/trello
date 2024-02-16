@@ -38,7 +38,34 @@ hooks.sortable = {
       delayOnTouchOnly: true,
       dragClass: "draggable-item",
       ghostClass: "bg-slate-400",
-      forceFallback: true
+      forceFallback: true,
+      handle: ".drag-handle",
+      onEnd: e => {
+        const elements = Array.from(this.el.children)
+        const fromList = e.from?.getAttribute("data-group")
+        const toList = e.to?.getAttribute("data-group")
+        const toListElements = Array.from(e.to?.children)
+
+        if (e.oldIndex === e.newIndex && fromList === toList) {
+          return
+        }
+
+        let params = {
+          movedId: fromList === toList ?
+            elements[e.newIndex].getAttribute("data-task-id") :
+            toListElements[e.newIndex].getAttribute("data-task-id"),
+          previousSiblingId: fromList === toList ?
+            elements[e.newIndex - 1]?.getAttribute("data-task-id") :
+            toListElements[e.newIndex - 1]?.getAttribute("data-task-id"),
+          nextSiblingId: fromList === toList ?
+            elements[e.newIndex + 1]?.getAttribute("data-task-id") :
+            toListElements[e.newIndex + 1]?.getAttribute("data-task-id"),
+          fromList,
+          toList
+        }
+
+        this.pushEventTo(this.el, "reorder", params)
+      }
     })
   }
 }

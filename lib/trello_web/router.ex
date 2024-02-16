@@ -22,6 +22,7 @@ defmodule TrelloWeb.Router do
     live "/boards/:board_id", BoardLive.Index, :index
     live "/boards/:board_id/lists", BoardLive.Index, :create_list
     live "/boards/:board_id/lists/:list_id", BoardLive.Index, :create_task
+    live "/tasks/:task_id", TaskLive.Show, :show
   end
 
   # Other scopes may use custom stacks.

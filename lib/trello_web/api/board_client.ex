@@ -20,11 +20,35 @@ defmodule TrelloWeb.BoardClient do
     post("/boards", %{"user_id" => user_id, "board" => board_params})
   end
 
+  def board_lists(board_id) do
+    get("/boards/#{board_id}/lists")
+  end
+
   def create_list(board_id, list_params) do
     post("/boards/#{board_id}/lists", %{"board_id" => board_id, "list" => list_params})
   end
 
+  def list_tasks(list_id) do
+    get("/lists/#{list_id}/tasks")
+  end
+
   def create_task(list_id, user_id, task_params) do
     post("/lists/#{list_id}/tasks", %{"reporter_id" => user_id, "task" => task_params})
+  end
+
+  def reorder_task(task_id, params) do
+    put("/tasks/#{task_id}/reorder", params)
+  end
+
+  def task(task_id) do
+    get("/tasks/#{task_id}")
+  end
+
+  def task_comments(task_id) do
+    get("/tasks/#{task_id}/comments")
+  end
+
+  def create_comment(task_id, creator_id, comment_params) do
+    post("/tasks/#{task_id}/comments", %{"creator_id" => creator_id, "comment" => comment_params})
   end
 end

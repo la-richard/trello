@@ -35,7 +35,7 @@ defmodule TrelloWeb.DashboardLive.Index do
   end
 
   def handle_event("create_board", params, socket) do
-    case BoardClient.create("afc57835-910d-495f-a0b9-232bb7392adb", params) do
+    case BoardClient.create("b093bd77-084a-499f-a77b-845eca0a718b", params) do
       {:ok, response} ->
         case response.status do
           201 -> {:noreply, socket
