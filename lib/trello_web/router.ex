@@ -18,6 +18,7 @@ defmodule TrelloWeb.Router do
     pipe_through :browser
 
     live "/", DashboardLive.Index, :index
+    live "/create", DashboardLive.Index, :create
     live "/boards/:id", BoardLive.Index, :index
   end
 
