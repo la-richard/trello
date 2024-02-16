@@ -13,7 +13,7 @@ defmodule TrelloWeb.DashboardLive.Index do
   end
 
   defp fetch_boards(socket) do
-    case BoardClient.all() do
+    case BoardClient.boards() do
       {:ok, response} -> socket |> assign(:boards, response.body["data"])
       {:error, _} -> socket
     end

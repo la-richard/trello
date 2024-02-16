@@ -1,17 +1,49 @@
 <.link navigate={~p"/"}>Back to dashboard</.link>
-<h1><%= @board %></h1>
+<h1><%= @board["name"] %></h1>
 <div class="flex flex-row w-full">
-  <div :for={list_id <- Enum.to_list(1..10)} class="flex flex-col basis-48 grow-0 shrink-0 h-full p-2 gap-2">
+  <div :for={%{"id" => list_id, "name" => list_name, "tasks" => tasks} <- @board["lists"]} class="flex flex-col basis-48 grow-0 shrink-0 h-full p-2 gap-2">
     <div class="flex flex-row w-full">
-      <h2>List <%= list_id %></h2>
+      <h2><%= list_name %></h2>
     </div>
     <div class="flex flex-col w-full gap-2" id={"list_#{list_id}"} data-group={"list_#{list_id}"} phx-hook="sortable">
-      <div :for={task_id <- Enum.to_list(1..5)} data-item-id={"#{task_id}"} class="h-24 w-full border border-solid border-black rounded p-2">
-        <%= task_id %>
+      <div :for={%{"id" => task_id, "name" => task_name} <- tasks} data-item-id={"#{task_id}"} class="h-24 w-full border border-solid border-black rounded p-2">
+        <%= task_name %>
       </div>
     </div>
-    <.link class="w-full p-2 hover:bg-slate-300 rounded">
+    <.link patch={~p"/boards/#{@board["id"]}/lists/#{list_id}"} class="w-full p-2 hover:bg-slate-300 rounded">
     Add a task
     </.link>
   </div>
+  <.link patch={~p"/boards/#{@board["id"]}/lists"} class="basis-48 grow-0 shrink-0 p-2">
+    Create new list
+  </.link>
 </div>
+
+<.modal :if={@live_action == :create_list} id="create-list-modal" show on_cancel={JS.patch(~p"/boards/#{@board["id"]}")}>
+  <div>
+  <.header>
+    Create new board
+  </.header>
+  <.simple_form for={@form} as={:form} id="create-board-form" phx-submit="save_list">
+    <.input field={@form[:name]} type="text" label="Name" />
+    <:actions>
+      <.button phx-disable-with="Saving...">Save list</.button>
+    </:actions>
+  </.simple_form>
+  </div>
+</.modal>
+
+<.modal :if={@live_action == :create_task} id="create-task-modal" show on_cancel={JS.patch(~p"/boards/#{@board["id"]}")}>
+  <div>
+  <.header>
+    Create new task
+  </.header>
+  <.simple_form for={@form} as={:form} id="create-task-form" phx-submit="save_task">
+    <.input field={@form[:name]} type="text" label="Name" />
+    <.input field={@form[:details]} type="textarea" label="Details" />
+    <:actions>
+      <.button phx-disable-with="Saving...">Save task</.button>
+    </:actions>
+  </.simple_form>
+  </div>
+</.modal>
