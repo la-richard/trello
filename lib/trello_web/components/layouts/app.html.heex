@@ -1,5 +1,18 @@
+<header class="flex flex-row p-2 h-14 border-b border-solid border-gray-700 bg-gray-900 items-center">
+  <div class="flex flex-1 items-center">
+    <.link href={~p"/"} class="px-2 rounded text-sm cursor-pointer hover:bg-zinc-500">
+      Bello
+    </.link>
+  </div>
+  <%= if @current_user do %>
+    <div class="flex flex-row gap-2 items-center">
+      <span class="text-sm"><%= @current_user["email"] %></span>
+      <.link href={~p"/users/logout"} method="DELETE" class="px-2 rounded bg-zinc-900 text-white text-sm leading-6 cursor-pointer hover:bg-zinc-700">Log out</.link>
+    </div>
+  <% end %>
+</header>
 <main>
-  <div>
+  <div class="mx-auto max-w-7xl mt-7">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>

@@ -1,12 +1,14 @@
 <div class="flex flex-col w-full gap-8">
   <div class="flex flex-col w-full gap-4">
-    <h1 class="uppercase">Your Boards</h1>
-    <div class="w-full flex flex-row flex-wrap gap-2 max-h-96">
-      <.link :for={%{"name" => name, "id" => id} <- @boards} navigate={~p"/boards/#{id}"} class="h-24 p-2 basis-60 border border-solid border-black rounded">
-        <span><%= name %></span>
+    <div class="flex flex-row gap-4 items-center">
+      <h1 class="text-sm uppercase">Your Boards</h1>
+      <.link patch={~p"/boards/create"} class="flex items-center rounded bg-zinc-900 text-white text-sm leading-6 cursor-pointer hover:bg-zinc-700">
+        <.icon name="hero-plus" class="h-5 w-5" />
       </.link>
-      <.link patch={~p"/create"} class="h-24 p-2 basis-60 border border-solid border-black rounded">
-        Create new board
+    </div>
+    <div class="w-full flex flex-row flex-wrap gap-2 max-h-96">
+      <.link :for={%{"name" => name, "id" => id} <- @boards} navigate={~p"/boards/#{id}"} class="h-24 p-2 basis-60 rounded bg-zinc-900 hover:bg-zinc-500">
+        <span class="text-sm"><%= name %></span>
       </.link>
     </div>
   </div>

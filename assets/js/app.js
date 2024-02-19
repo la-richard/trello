@@ -50,10 +50,14 @@ hooks.sortable = {
           return
         }
 
+        const newElement = fromList === toList ? elements[e.newIndex] : toListElements[e.newIndex];
+
+        if (!newElement) {
+          return
+        }
+
         let params = {
-          movedId: fromList === toList ?
-            elements[e.newIndex].getAttribute("data-task-id") :
-            toListElements[e.newIndex].getAttribute("data-task-id"),
+          movedId: newElement.getAttribute("data-task-id"),
           previousSiblingId: fromList === toList ?
             elements[e.newIndex - 1]?.getAttribute("data-task-id") :
             toListElements[e.newIndex - 1]?.getAttribute("data-task-id"),

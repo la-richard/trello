@@ -3,9 +3,10 @@ defmodule TrelloWeb.DashboardLive.Index do
 
   alias TrelloWeb.BoardClient
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     socket =
       socket
+      |> assign(:api_client, BoardClient.new(session["access_token"]))
       |> fetch_boards()
       |> assign(:page_title, "Boards")
 
@@ -13,12 +14,22 @@ defmodule TrelloWeb.DashboardLive.Index do
   end
 
   defp fetch_boards(socket) do
-    case BoardClient.boards() do
-      {:ok, response} -> socket |> assign(:boards, response.body["data"])
-      {:error, _} -> socket
+    %{current_user: %{"id" => user_id}, api_client: api_client} = socket.assigns
+    case BoardClient.user_boards(api_client, user_id) do
+      {:ok, response} ->
+        case response.status do
+          200 -> assign(socket, :boards, response.body["data"])
+          403 -> push_navigate(socket, to: ~p"/login") # TODO: util function to return to this page after logging in
+          _ -> assign(socket, :boards, [])
+        end
+      {:error, _} -> assign(socket, :boards, [])
     end
   end
 
+  @spec handle_params(any(), any(), %{
+          :assigns => atom() | %{:live_action => :create | :index, optional(any()) => any()},
+          optional(any()) => any()
+        }) :: {:noreply, map()}
   def handle_params(params, _uri, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
@@ -35,7 +46,8 @@ defmodule TrelloWeb.DashboardLive.Index do
   end
 
   def handle_event("create_board", params, socket) do
-    case BoardClient.create("b093bd77-084a-499f-a77b-845eca0a718b", params) do
+    %{api_client: api_client, current_user: %{"id" => user_id}} = socket.assigns
+    case BoardClient.create(api_client, user_id, params) do
       {:ok, response} ->
         case response.status do
           201 -> {:noreply, socket
